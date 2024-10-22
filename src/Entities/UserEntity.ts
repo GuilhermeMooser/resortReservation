@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from "typeorm";
+import ResortEntity from "./ResortEntity";
 
 @Entity()
 export default class UserEntity {
@@ -13,6 +20,10 @@ export default class UserEntity {
 
   @Column({ nullable: true, default: false })
   isNew?: boolean;
+
+  @ManyToMany(() => ResortEntity, { nullable: true })
+  @JoinTable()
+  resorts!: ResortEntity[];
 
   constructor(name: string, cpf: string, isNew?: boolean) {
     this.name = name;

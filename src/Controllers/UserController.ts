@@ -1,12 +1,22 @@
 import { Request, Response } from "express";
 import UserEntity from "../Entities/UserEntity";
 import UserRepository from "../Repositories/UserRepository";
+import ResortRepository from "../Repositories/ResortRepository";
 
 export default class UserController {
-  constructor(private repository: UserRepository) {}
+  constructor(
+    private repository: UserRepository,
+    private resortRepository: ResortRepository
+  ) {}
 
   async createUser(req: Request, res: Response) {
-    const { name, cpf, isNew } = <UserEntity>req.body;
+    const { name, cpf, isNew, resorts } = <UserEntity>req.body;
+
+    if (resorts !== null) {
+      const resortsIds = resorts.map((resort) => resort.id);
+      const resortList = await this.resortRepository.findBy(resortsIds);
+      console.log(resortList);
+    }
 
     const newUser: UserEntity = new UserEntity(name, cpf, isNew);
 
